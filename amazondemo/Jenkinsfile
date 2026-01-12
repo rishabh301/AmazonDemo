@@ -2,7 +2,7 @@ pipeline {
     agent any 
     
     tools {
-        maven 'Maven'  // Make sure Maven is configured in Jenkins Global Tool Configuration
+        maven 'Maven'
     }
     
     stages {
@@ -16,45 +16,53 @@ pipeline {
         stage('Clean') {
             steps {
                 echo "Cleaning previous builds"
-                bat "mvn clean"
+                dir('amazondemo') {
+                    bat "mvn clean"
+                }
             }
         }
         
         stage('Compile') {
             steps {
                 echo "Compiling the source code"
-                bat "mvn compile"
+                dir('amazondemo') {
+                    bat "mvn compile"
+                }
             }
         }
         
         stage('Test') {
             steps {
                 echo "Running unit tests"
-                bat "mvn test"
+                dir('amazondemo') {
+                    bat "mvn test"
+                }
             }
         }
         
         stage('Package') {
             steps {
                 echo "Packaging the application"
-                bat "mvn package"
+                dir('amazondemo') {
+                    bat "mvn package"
+                }
             }
         }
         
         stage('Deploy') {
             steps {
                 echo "Application packaged successfully"
-                echo "WAR file created in target directory"
+                echo "WAR file created in amazondemo/target directory"
             }
         }
     }
     
     post {
         success {
-            echo "Build completed successfully!"
+            echo "✓ Build completed successfully!"
         }
         failure {
-            echo "Build failed. Please check the logs."
+            echo "✗ Build failed. Please check the logs."
         }
     }
 }
