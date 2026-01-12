@@ -1,0 +1,28 @@
+pipeline {
+    agent any 
+    stages {
+        stage('Build') {
+            steps {
+                echo "build step is successful"
+                bat "mvn clean"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "test step is successful"
+                bat "mvn test"
+            }
+        }
+        stage('Compile') {
+            steps {
+                echo "compile step is successful"
+                bat "mvn compile"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "deploy step is successful"
+            }
+        }
+    }
+}
