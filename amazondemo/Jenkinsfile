@@ -1,28 +1,60 @@
 pipeline {
     agent any 
+    
+    tools {
+        maven 'Maven'  // Make sure Maven is configured in Jenkins Global Tool Configuration
+    }
+    
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo "build step is successful"
+                echo "Checking out code from GitHub"
+                git branch: 'main', url: 'https://github.com/rishabh301/AmazonDemo.git'
+            }
+        }
+        
+        stage('Clean') {
+            steps {
+                echo "Cleaning previous builds"
                 bat "mvn clean"
             }
         }
-        stage('Test') {
-            steps {
-                echo "test step is successful"
-                bat "mvn test"
-            }
-        }
+        
         stage('Compile') {
             steps {
-                echo "compile step is successful"
+                echo "Compiling the source code"
                 bat "mvn compile"
             }
         }
+        
+        stage('Test') {
+            steps {
+                echo "Running unit tests"
+                bat "mvn test"
+            }
+        }
+        
+        stage('Package') {
+            steps {
+                echo "Packaging the application"
+                bat "mvn package"
+            }
+        }
+        
         stage('Deploy') {
             steps {
-                echo "deploy step is successful"
+                echo "Application packaged successfully"
+                echo "WAR file created in target directory"
             }
+        }
+    }
+    
+    post {
+        success {
+            echo "Build completed successfully!"
+        }
+        failure {
+            echo "Build failed. Please check the logs."
         }
     }
 }
